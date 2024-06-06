@@ -4,6 +4,7 @@ using Inscripciones.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Inscripciones.Migrations
 {
     [DbContext(typeof(InscripcionesContext))]
-    partial class InscripcionesContextModelSnapshot : ModelSnapshot
+    [Migration("20240603212339_agregamosInscripciones")]
+    partial class agregamosInscripciones
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -76,72 +79,37 @@ namespace Inscripciones.Migrations
 
                     MySqlPropertyBuilderExtensions.UseMySqlIdentityColumn(b.Property<int>("Id"));
 
+                    b.Property<int?>("AlumnoId")
+                        .HasColumnType("int");
+
                     b.Property<int>("CarreraId")
                         .HasColumnType("int");
 
                     b.Property<DateTime>("Fecha")
                         .HasColumnType("datetime(6)");
 
-                    b.Property<int>("alumnoId")
-                        .HasColumnType("int");
-
                     b.HasKey("Id");
 
-                    b.HasIndex("CarreraId");
+                    b.HasIndex("AlumnoId");
 
-                    b.HasIndex("alumnoId");
+                    b.HasIndex("CarreraId");
 
                     b.ToTable("inscripciones");
                 });
 
-            modelBuilder.Entity("Inscripciones.Models.anioCarrera", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    MySqlPropertyBuilderExtensions.UseMySqlIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<string>("Nombre")
-                        .IsRequired()
-                        .HasColumnType("longtext");
-
-                    b.Property<int>("carreraId")
-                        .HasColumnType("int");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("carreraId");
-
-                    b.ToTable("anioCarreras");
-                });
-
             modelBuilder.Entity("Inscripciones.Models.Inscripcion", b =>
                 {
+                    b.HasOne("Inscripciones.Models.Alumno", "Alumno")
+                        .WithMany()
+                        .HasForeignKey("AlumnoId");
+
                     b.HasOne("Inscripciones.Models.Carrera", "Carrera")
                         .WithMany()
                         .HasForeignKey("CarreraId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("Inscripciones.Models.Alumno", "Alumno")
-                        .WithMany()
-                        .HasForeignKey("alumnoId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
                     b.Navigation("Alumno");
-
-                    b.Navigation("Carrera");
-                });
-
-            modelBuilder.Entity("Inscripciones.Models.anioCarrera", b =>
-                {
-                    b.HasOne("Inscripciones.Models.Carrera", "Carrera")
-                        .WithMany()
-                        .HasForeignKey("carreraId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
 
                     b.Navigation("Carrera");
                 });

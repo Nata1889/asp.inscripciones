@@ -25,5 +25,7 @@ namespace Inscripciones.Models
 
         public virtual DbSet<Alumno> alumnos { get; set; }
         public virtual DbSet<Carrera> carreras { get; set; }
+        public virtual DbSet<Inscripcion> inscripciones { get; set; }
+        public virtual DbSet<anioCarrera> anioCarreras { get;set; }
     }
 }
